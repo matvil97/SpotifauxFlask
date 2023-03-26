@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Librairie audio</title>
+</head>
+<body>
+    <h1>Albums de l'artiste</h1>
+    {% if album_list %}
+        <ul>
+            {% for album in album_list %}
+                <li>{{ album['name'] }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

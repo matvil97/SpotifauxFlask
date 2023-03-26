@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Librairie audio</title>
+</head>
+<body>
+    <h1>Recherche d'artistes</h1>
+    <form method="POST">
+        <input type="text" name="artist_name">
+        <button type="submit">Rechercher</button>
+    </form>
+    {% if artist_list %}
+        <h2>Résultats de la recherche :</h2>
+        <ul>
+            {% for artist in artist_list %}
+                <li><a href="{{ url_for('albums', artist_id=artist['id']) }}">{{ artist['name'] }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
