@@ -1,0 +1,44 @@
+        /* Commentaire CSS */
+
+/* Définition de la police de caractères pour tout le document */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  /* Définition de la couleur de fond pour tout le document */
+  body {
+    background-color: #F0F0F0;
+  }
+  
+  /* Définition du style pour les titres h1 */
+  h1 {
+    font-size: 36px;
+    color: #333;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: Italic;
+  }
+  
+  /* Définition du style pour les liens */
+  a {
+    color: #0066CC;
+    text-decoration: none;
+  }
+  
+  /* Définition du style pour les boutons */
+  .button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #0066CC;
+    color: #FFF;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+  }
+  
+  /* Définition du style pour les boutons lorsqu'ils sont survolés */
+  .button:hover {
+    background-color: #005599;
+    cursor: pointer;
+  }

@@ -1,0 +1,1 @@
+var artist_list = document.getElementById("artist-list");
