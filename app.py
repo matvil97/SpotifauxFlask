@@ -1,8 +1,7 @@
 from flask import Flask, render_template, request
-import requests
+#import requests
 
-app = Flask(__name__)
-
+app = Flask("Spotifaux")
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
