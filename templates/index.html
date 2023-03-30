@@ -21,11 +21,9 @@
 
         <h1>Liste d'artistes</h1>
         <ul id="artist-list">
-          <li>Bob Dylan</li>
-          <li>The Beatles</li>
-          <li>Elvis Presley</li>
-          <li>Michael Jackson</li>
-          <li>Prince</li>
+          {% for user in users %}
+          <li>{{ user[1] }}</li>
+          {% endfor %}
         </ul>
         <button class="btn btn-primary" onclick="addArtist()">Ajouter un artiste</button>
         <button class="btn btn-primary" onclick="removeArtist()">Supprimer le dernier artiste</button>

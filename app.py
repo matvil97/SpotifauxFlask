@@ -23,11 +23,4 @@ def users():
     conn.close()
 
     # afficher les utilisateurs dans une page HTML
-    return render_template('users.html', users=users)
-
-@app.route('/albums/<artist_id>')
-def albums(artist_id):
-    # Code pour récupérer les albums de l'artiste sélectionné
-    return render_template('albums.html', album_list=album_list)
-
-
+    return render_template('index.html', users=users)
