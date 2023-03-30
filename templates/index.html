@@ -27,11 +27,12 @@
                         <a class="nav-link" href="#">Mes titres likés</a>
                     </li>
                 </ul>
+                <span class="text-light">Bonjour, {{ session['USR_USERNAME'] }}</span>
+                <li class="nav-item"></li>
                 <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Rechercher un artiste"
-                        aria-label="Search">
                     <a href="/logout" class="btn btn-outline-danger">Deconnexion</a>
                 </form>
+                <span></span>
             </div>
         </div>
     </nav>
@@ -42,7 +43,7 @@
             <h1>Liste d'artistes</h1>
             <ul id="artist-list">
                 {% for title in titles %}
-                    <li>{{ title[1] }} - {{ title[2] }} - {{ title[3] }} - {{ title[4] }}</li>
+                <li>{{ title[1] }} - {{ title[2] }} - {{ title[3] }} - {{ title[4] }}</li>
                 {% endfor %}
             </ul>
 

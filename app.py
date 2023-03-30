@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, Response, session
-from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from pathlib import Path
 import sqlite3
@@ -8,41 +7,19 @@ app = Flask("Spotifaux")
 
 if not Path('database/spotifaux.db').exists():
     conn = sqlite3.connect('database/spotifaux.db')
-    sql = Path('tables.sql').read_text()
+    conn.execute('PRAGMA encoding="UTF-8"')
+    sql = Path('tables.sql').read_text(encoding='utf-8')
     conn.executescript(sql)
+
 
 # Configurer la session de l'application pour qu'elle utilise un secret key
 app.secret_key = 'super_secret_key'
 
-# Initialiser l'objet LoginManager
-login_manager = LoginManager()
-login_manager.init_app(app)
-
-class User(UserMixin):
-    def __init__(self, id, email, password):
-        self.id = id
-        self.email = email
-        self.password = password
-
-    @staticmethod
-    def get(user_id):
-        conn = sqlite3.connect('database/spotifaux.db')
-        cursor = conn.execute('SELECT * FROM USER_USR WHERE USR_ID = ?', (user_id,))
-        row = cursor.fetchone()
-        user = None
-        if row is not None:
-            user = User(row[0], row[1], row[2])
-        conn.close()
-        return user
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.get(user_id)
 
 @app.route('/')
 def titles():
     if 'ID_USR' in session:
-        # se connecter à la base de données 
+        # se connecter à la base de données
         conn = sqlite3.connect('database/spotifaux.db')
 
         # récupérer les utilisateurs dans la table TITLE_TTL
@@ -58,6 +35,8 @@ def titles():
         return redirect('/login')
 
 # Route pour traiter le formulaire de login
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login_post():
     if request.method == 'POST':
@@ -65,9 +44,10 @@ def login_post():
         password = request.form['password']
 
         conn = sqlite3.connect('database/spotifaux.db')
-        cursor = conn.execute('SELECT * FROM USER_USR WHERE USR_MAIL = ?', (email,))
+        cursor = conn.execute(
+            'SELECT * FROM USER_USR WHERE USR_MAIL = ?', (email,))
         user = cursor.fetchone()
-        
+
         if user[3] == password:
             # l'utilisateur est authentifié
             # rediriger vers la page d'accueil
@@ -78,15 +58,17 @@ def login_post():
         else:
             # l'utilisateur n'est pas authentifié
             # rediriger vers la page de connexion
-            flash("E-mail ou mot de passe incorrect !")
+            flash("E-mail ou mot de passe incorrect ! Veuillez réessayer.")
             return redirect('/login')
     return render_template('login.html')
+
 
 @app.route('/logout')
 # @login_required
 def logout():
     session.clear()
     return redirect('/')
+
 
 @app.route('/test')
 def test_db():

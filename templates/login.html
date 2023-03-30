@@ -11,24 +11,6 @@
 </head>
 
 <body>
-
-    <div class="container-fluid">
-        <div class="container">
-
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-error">
-                <p>{{ message }} </p>
-            </div>
-            {% endfor %}
-            {% endif %}
-            {% endwith %}
-
-
-        </div>
-    </div>
-
     <div class="container mt-5">
         <div class="row d-flex justify-content-center">
             <div class="col-md-6">
@@ -42,8 +24,16 @@
                             </div>
                             <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">Mot de passe</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1" name="password" required>
+                                <input type="password" class="form-control" id="exampleInputPassword1" name="password"
+                                    required>
                             </div>
+                            {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                            {% for message in messages %}
+                            <p class="text-center text-danger">{{ message }}</p>
+                            {% endfor %}
+                            {% endif %}
+                            {% endwith %}
                             <button type="submit" class="btn btn-primary">Se connecter</button>
                         </form>
                     </div>
