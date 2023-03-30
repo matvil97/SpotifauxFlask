@@ -24,7 +24,7 @@
                         <a class="nav-link active" aria-current="page" href="/">Accueil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Mes titres likés</a>
+                        <a class="nav-link" href="/liked">Mes titres likés</a>
                     </li>
                 </ul>
                 <span class="text-light">Bonjour, {{ session['USR_USERNAME'] }}</span>
@@ -37,28 +37,50 @@
         </div>
     </nav>
 
-    <div class="container-fluid">
-        <div class="container">
+    <div class="container">
+        <h1 class="m-5 text-center">Les titres du moments</h1>
+        <div class="row">
+            {% set i = 1 %}
+            {% for title in titles %}
+            <div class="col-3 {% if i % 4 == 0 %}mb-5{% endif %}">
+                <div class="card">
+                    <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                        <img class="card-img-top" src="{{ title[5] }}" alt="Card image cap">
+                        <a href="#!">
+                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                        </a>
+                    </div>
+                    <div class="card-body text-center">
 
-            <h1>Liste d'artistes</h1>
-            <ul id="artist-list">
-                {% for title in titles %}
-                <li>{{ title[1] }} - {{ title[2] }} - {{ title[3] }} - {{ title[4] }}</li>
-                {% endfor %}
-            </ul>
+                        <h5 class="h5 font-weight-bold"><a href="#" target="_blank">{{ title[2] }}</a></h5>
+                        <p class="mb-0">{{ title[1] }}</p>
 
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-error">
-                <p>{{ message }} </p>
+                        <audio id="music" preload="true">
+                            <source src="#">
+                        </audio>
+
+                        <div id="audioplayer">
+                            <i id="pButton" class="fas fa-play"></i>
+                            <div id="timeline">
+                                <div id="playhead"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
+            {% set i = i + 1 %}
             {% endfor %}
-            {% endif %}
-            {% endwith %}
-
         </div>
     </div>
+
+    <footer class="bg-dark text-center text-lg-start text-light mt-5">
+        <div class="text-center p-3">
+            © 2023 Copyright: CDEV IPI LYON<br>
+            ANCELIN Maxime - VILMEN Matthieu - GLADINES Viksha
+        </div>
+
+    </footer>
 </body>
 
 </html>
