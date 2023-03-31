@@ -13,7 +13,11 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand text-success" href="/">Spotifaux</a>
+            <a class="navbar-brand text-success" href="/">
+                <img src="{{ url_for('static', filename='img/spotifaux.png') }}" width="30" height="30"
+                    class="d-inline-block align-top" alt="">
+                <strong>Spotifaux</strong>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
                 aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -21,39 +25,65 @@
             <div class="collapse navbar-collapse" id="navbarScroll">
                 <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Accueil</a>
+                        <a class="nav-link" aria-current="page" href="/">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/liked">Mes titres likés</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/add_title">Ajouter une musique</a>
                     </li>
                 </ul>
+                <span class="text-light" style="margin-right: 1rem;">Bonjour, {{ session['USR_USERNAME'] }}</span>
+                <form class="d-flex" role="search">
                     <a href="/logout" class="btn btn-outline-danger">Deconnexion</a>
+                </form>
             </div>
         </div>
     </nav>
 
-    <form method="POST" action="/add_title">
-        <div class="mb-3">
-            <label for="title_name" class="form-label">Nom du titre :</label>
-            <input type="text" class="form-control" id="title_name" name="title_name" required>
-        </div>
-        <div class="mb-3">
-            <label for="title_artist" class="form-label">Artiste :</label>
-            <input type="text" class="form-control" id="title_artist" name="title_artist" required>
-        </div>
-        <div class="mb-3">
-            <label for="title_duration" class="form-label">Durée (en sec.) :</label>
-            <input type="number" class="form-control" id="title_duration" name="title_duration" required>
-        </div>
-        <div class="mb-3">
-            <label for="title_type" class="form-label">Type :</label>
-            <input type="text" class="form-control" id="title_type" name="title_type" required>
-        </div>
-        <div class="mb-3">
-            <label for="title_img" class="form-label">URL de l'image :</label>
-            <input type="text" class="form-control" id="title_img" name="title_img" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Ajouter un titre</button>
-    </form>
+    <div class="container mt-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-6">
+                <div class="card px-5 py-5" id="form1">
+                    <h2 class="text-center mb-5">Ajouter un son</h2>
+                    <div class="form-data">
+                        <form method="POST">
+                            <div class="mb-3">
+                                <label for="title_name" class="form-label">Titre du son</label>
+                                <input type="text" class="form-control" id="title_name" name="title_name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="title_artist" class="form-label">Artiste</label>
+                                <input type="text" class="form-control" id="title_artist" name="title_artist" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="title_duration" class="form-label">Durée (en sec)</label>
+                                <input type="number" class="form-control" id="title_duration" name="title_duration" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="title_type" class="form-label">Type</label>
+                                <input type="text" class="form-control" id="title_type" name="title_type" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="title_img" class="form-label">Lien image</label>
+                                <input type="text" class="form-control" id="title_img" name="title_img" required>
+                            </div>
 
-    <div class="container-fluid">
-        <div class="container">
+                            {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                            {% for message in messages %}
+                            <p class="text-center text-danger">{{ message }}</p>
+                            {% endfor %}
+                            {% endif %}
+                            {% endwith %}
 
-
+                            <button type="submit" class="btn btn-primary">Ajouter</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

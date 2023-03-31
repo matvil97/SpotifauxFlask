@@ -16,10 +16,24 @@
             right: 10px;
         }
 
+        .card:hover .btn-delete {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
         .btn-heart-0 {
             position: absolute;
             top: 10px;
             right: 10px;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+
+        .btn-delete {
+            position: absolute;
+            top: 10px;
+            left: 10px;
             opacity: 0;
             transition: opacity 0.2s ease-in-out;
         }
@@ -34,6 +48,10 @@
         .card:hover .btn-heart-0 {
             opacity: 1;
         }
+
+        .card:hover .btn-delete {
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -41,7 +59,8 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand text-success" href="/">
-                <img src="{{ url_for('static', filename='img/spotifaux.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+                <img src="{{ url_for('static', filename='img/spotifaux.png') }}" width="30" height="30"
+                    class="d-inline-block align-top" alt="">
                 <strong>Spotifaux</strong>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
@@ -56,16 +75,15 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/liked">Mes titres likés</a>
                     </li>
-                    <li class="nav-item">²
+                    <li class="nav-item">
                         <a class="nav-link" href="/add_title">Ajouter une musique</a>
                     </li>
                 </ul>
-                <span class="text-light">Bonjour, {{ session['USR_USERNAME'] }}</span>
-                <li class="nav-item"></li>
+                <span class="text-light" style="margin-right: 1rem;">Bonjour, {{ session['USR_USERNAME'] }}</span>
                 <form class="d-flex" role="search">
                     <a href="/logout" class="btn btn-outline-danger">Deconnexion</a>
                 </form>
-            </div>
+            </div>  
         </div>
     </nav>
 
@@ -96,19 +114,23 @@
                         </div>
 
                         {% if title[6] == 1 %}
-                            <a href="/unlike/{{ title[0] }}">
-                                <div class="btn btn-lg btn-heart-1 btn-light text-success">
-                                    <i class="fa-solid fa-heart"></i>
-                                </div>
-                            </a>
+                        <a href="/unlike/{{ title[0] }}">
+                            <div class="btn btn-lg btn-heart-1 btn-light text-success">
+                                <i class="fa-solid fa-heart"></i>
+                            </div>
+                        </a>
                         {% else %}
-                            <a href="/like/{{ title[0] }}">
-                                <div class="btn btn-lg btn-heart-0 btn-success">
-                                    <i class="fa-regular fa-heart"></i>
-                                </div>
-                            </a>
+                        <a href="/like/{{ title[0] }}">
+                            <div class="btn btn-lg btn-heart-0 btn-success">
+                                <i class="fa-regular fa-heart"></i>
+                            </div>
+                        </a>
                         {% endif %}
-                        </a>    
+                        <a href="/delete/{{ title[0] }}">
+                            <div class="btn btn-lg btn-delete btn-danger">
+                                <i class="fa-solid fa-trash"></i>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>

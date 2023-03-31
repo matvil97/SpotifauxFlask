@@ -47,12 +47,11 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="/liked">Mes titres likés</a>
                     </li>
-                    <li class="nav-item">²
+                    <li class="nav-item">
                         <a class="nav-link" href="/add_title">Ajouter une musique</a>
                     </li>
                 </ul>
-                <span class="text-light">Bonjour, {{ session['USR_USERNAME'] }}</span>
-                <li class="nav-item"></li>
+                <span class="text-light" style="margin-right: 1rem;">Bonjour, {{ session['USR_USERNAME'] }}</span>
                 <form class="d-flex" role="search">
                     <a href="/logout" class="btn btn-outline-danger">Deconnexion</a>
                 </form>
