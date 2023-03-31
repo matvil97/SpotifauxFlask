@@ -10,7 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from pathlib import Path
 import sqlite3
 
-app = Flask("Spotifaux")
+app = Flask("Spotifaux", static_folder='templates', static_url_path='/templates')
 
 # If databse doesn't exist, create it by reading the script tables.sql
 
@@ -35,7 +35,10 @@ def titles():
         conn = sqlite3.connect("database/spotifaux.db")
 
         # get data from the TITLE_TTL table
-        cursor = conn.execute("SELECT * FROM TITLE_TTL")
+        cursor = conn.execute(
+            "SELECT TTL.*, CASE WHEN LUS.ID_TTL IS NOT NULL THEN 1 ELSE 0 END AS TTL_LIKED FROM TITLE_TTL TTL LEFT JOIN (SELECT ID_TTL FROM LIKE_USER_LUS WHERE ID_USR = ?) LUS ON TTL.ID_TTL = LUS.ID_TTL;",
+            (session["ID_USR"],),
+        )
         titles = cursor.fetchall()
 
         # close the connection to the database
@@ -76,7 +79,7 @@ def login_post():
             # redirect to the login page
             flash("E-mail ou mot de passe incorrect. Veuillez réessayer")
             return redirect("/login")
-    #return the template html page login
+    # return the template html page login
     return render_template("login.html")
 
 
@@ -90,6 +93,49 @@ def logout():
     return redirect("/")
 
 
+# Root - Like feature
+
+
+@app.route("/like/<int:id>")
+def like(id):
+    # connect to the database
+    conn = sqlite3.connect("database/spotifaux.db")
+
+    # insert data into LIKE_USER_LUS table
+    cursor = conn.execute(
+        "INSERT INTO LIKE_USER_LUS (ID_USR, ID_TTL) VALUES (?, ?);",
+        (session["ID_USR"], id),
+    )
+    conn.commit()
+
+    # close the connection to the database
+    conn.close()
+    return redirect(request.referrer)
+
+
+# Root - Unlike feature
+
+
+@app.route("/unlike/<int:id>")
+def unlike(id):
+    # connect to the database
+    conn = sqlite3.connect("database/spotifaux.db")
+
+    # insert data into LIKE_USER_LUS table
+    cursor = conn.execute(
+        "DELETE FROM LIKE_USER_LUS WHERE ID_USR = ? AND ID_TTL = ?;",
+        (session["ID_USR"], id),
+    )
+    conn.commit()
+
+    # close the connection to the database
+    conn.close()
+    return redirect(request.referrer)
+
+
+# Root - Liked title page
+
+
 @app.route("/liked")
 def liked_titles():
     # connect to the database
@@ -97,7 +143,7 @@ def liked_titles():
 
     # get data from the LIKE_USER_LUS table
     cursor = conn.execute(
-        "SELECT LUS.*, TTL.TTL_NAME,TTL.TTL_ARTIST FROM LIKE_USER_LUS LUS JOIN TITLE_TTL TTL ON LUS.ID_TTL = TTL.ID_TTL WHERE ID_USR = ?",
+        "SELECT LUS.*, TTL.* FROM LIKE_USER_LUS LUS JOIN TITLE_TTL TTL ON LUS.ID_TTL = TTL.ID_TTL WHERE ID_USR = ?",
         (session["ID_USR"],),
     )
     liked_titles = cursor.fetchall()
@@ -115,7 +161,7 @@ def liked_titles():
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
-        # get form data 
+        # get form data
         username = request.form["username"]
         email = request.form["email"]
         password = request.form["password"]
@@ -145,6 +191,34 @@ def signup():
 
     # return the template html page sign up
     return render_template("signup.html")
+
+# Page + Function to add a new music 
+@app.route('/add_title', methods=['GET', 'POST'])
+
+def add_title_route():
+    if request.method == 'POST':
+
+        # asks for all the information of the music to add
+        title_name = request.form['title_name']
+        title_artist = request.form['title_artist']
+        title_duration = request.form['title_duration']
+        title_type = request.form['title_type']
+        title_img = request.form['title_img']
+        add_title(title_name, title_artist, title_duration, title_type, title_img)
+        return redirect("/")
+    else:
+        return render_template('add_title.html')
+
+def add_title(title_name, title_artist, title_duration, title_type, title_img):
+
+    # connect to the database
+    conn = sqlite3.connect('database/spotifaux.db')
+
+    # add the new music in the database
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO TITLE_TTL (TTL_NAME, TTL_ARTIST, TTL_DURATION, TTL_TYPE, TTL_IMG) VALUES (?, ?, ?, ?, ?)", (title_name, title_artist, title_duration, title_type, title_img))
+    conn.commit()
+    conn.close()
 
 
 if __name__ == "__main__":

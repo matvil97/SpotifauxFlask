@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Spotifaux</title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand text-success" href="/">Spotifaux</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+                aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarScroll">
+                <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Accueil</a>
+                    </li>
+                </ul>
+                    <a href="/logout" class="btn btn-outline-danger">Deconnexion</a>
+            </div>
+        </div>
+    </nav>
+
+    <form method="POST" action="/add_title">
+        <div class="mb-3">
+            <label for="title_name" class="form-label">Nom du titre :</label>
+            <input type="text" class="form-control" id="title_name" name="title_name" required>
+        </div>
+        <div class="mb-3">
+            <label for="title_artist" class="form-label">Artiste :</label>
+            <input type="text" class="form-control" id="title_artist" name="title_artist" required>
+        </div>
+        <div class="mb-3">
+            <label for="title_duration" class="form-label">Durée (en sec.) :</label>
+            <input type="number" class="form-control" id="title_duration" name="title_duration" required>
+        </div>
+        <div class="mb-3">
+            <label for="title_type" class="form-label">Type :</label>
+            <input type="text" class="form-control" id="title_type" name="title_type" required>
+        </div>
+        <div class="mb-3">
+            <label for="title_img" class="form-label">URL de l'image :</label>
+            <input type="text" class="form-control" id="title_img" name="title_img" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Ajouter un titre</button>
+    </form>
+
+    <div class="container-fluid">
+        <div class="container">
+
+
