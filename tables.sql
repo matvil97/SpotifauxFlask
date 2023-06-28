@@ -41,9 +41,9 @@ CREATE TABLE IF NOT EXISTS LIKE_USER_LUS
 ---------------------------------------------------------
 
 -- INSERT DATA IN USER_USR TABLE
-INSERT INTO USER_USR (USR_USERNAME, USR_MAIL, USR_PASSWORD) VALUES ('Maxime Ancelin', 'maxime.ancelin1@ipilyon.net', '1234');
-INSERT INTO USER_USR (USR_USERNAME, USR_MAIL, USR_PASSWORD) VALUES ('Viksha-Alix Gladines', 'vikshaalix.gladines@ipilyon.net', '1234');
-INSERT INTO USER_USR (USR_USERNAME, USR_MAIL, USR_PASSWORD) VALUES ('Matthieu Vilmen', 'matthieu.vilmen@ipilyon.net', '1234');
+INSERT INTO USER_USR (USR_USERNAME, USR_MAIL, USR_PASSWORD) VALUES ('Maxime Ancelin', 'maxime.ancelin1@ipilyon.net', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4');
+INSERT INTO USER_USR (USR_USERNAME, USR_MAIL, USR_PASSWORD) VALUES ('Viksha-Alix Gladines', 'vikshaalix.gladines@ipilyon.net', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4');
+INSERT INTO USER_USR (USR_USERNAME, USR_MAIL, USR_PASSWORD) VALUES ('Matthieu Vilmen', 'matthieu.vilmen@ipilyon.net', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4');
 
 -- INSERT DATA IN TITLE_TTL TABLE
 INSERT INTO TITLE_TTL (TTL_NAME, TTL_ARTIST, TTL_DURATION, TTL_TYPE, TTL_IMG) VALUES ('En lair', 'Relsca', 199, 'Hip-Hop', 'https://i.scdn.co/image/ab67616d00001e026dec83fcfb43f0d97b0e464d');

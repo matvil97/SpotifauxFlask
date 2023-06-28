@@ -6,11 +6,11 @@ from flask import (
     redirect,
     session,
 )
-from werkzeug.security import generate_password_hash, check_password_hash
+import hashlib
 from pathlib import Path
 import sqlite3
 
-app = Flask("Spotifaux", static_folder='templates', static_url_path='/templates')
+app = Flask("Spotifaux", static_folder="templates", static_url_path="/templates")
 
 # If databse doesn't exist, create it by reading the script tables.sql
 
@@ -67,7 +67,8 @@ def login_post():
         user = cursor.fetchone()
 
         # if the password send is the same as the result of the query
-        if user[3] == password:
+        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+        if user[3] == hashed_password:
             # the user is authenticated
             # redirect to the home page
             session["ID_USR"] = user[0]
@@ -81,6 +82,47 @@ def login_post():
             return redirect("/login")
     # return the template html page login
     return render_template("login.html")
+
+
+# Root - Sign up feature
+
+
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    if request.method == "POST":
+        # get form data
+        username = request.form["username"]
+        email = request.form["email"]
+        password = request.form["password"]
+        confirm_password = request.form["confirm_password"]
+
+        # check if the password and the confirm_password are identic
+        if password != confirm_password:
+            flash("Les mots de passe ne correspondent pas. Veuillez Réessayer.")
+            return redirect("/signup")
+
+        # connect to the database
+        conn = sqlite3.connect("database/spotifaux.db")
+
+        # hash the password before inserting it into the database
+        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+
+        # insert new user in USER_USR table
+        conn.execute(
+            "INSERT INTO USER_USR (USR_USERNAME, USR_MAIL, USR_PASSWORD) VALUES (?, ?, ?)",
+            (username, email, hashed_password),
+        )
+        conn.commit()
+
+        # close the connection to the database
+        conn.close()
+
+        # redirect to the login page
+        flash("Vous êtes maintenant inscrit ! Veuillez vous connecter.")
+        return redirect("/login")
+
+    # return the template html page sign up
+    return render_template("signup.html")
 
 
 # Root - Log out feature
@@ -133,7 +175,7 @@ def unlike(id):
     return redirect(request.referrer)
 
 
-# Root - Liked title page
+# Root - My liked titles page
 
 
 @app.route("/liked")
@@ -155,70 +197,56 @@ def liked_titles():
     return render_template("liked.html", liked_titles=liked_titles)
 
 
-# Root - Sign up feature
+# Root - Add a song/title
 
 
-@app.route("/signup", methods=["GET", "POST"])
-def signup():
-    if request.method == "POST":
-        # get form data
-        username = request.form["username"]
-        email = request.form["email"]
-        password = request.form["password"]
-        confirm_password = request.form["confirm_password"]
-
-        # check if the password and the confirm_password are identic
-        if password != confirm_password:
-            flash("Les mots de passe ne correspondent pas.")
-            return redirect("/signup")
-
-        # connect to the database
-        conn = sqlite3.connect("database/spotifaux.db")
-
-        # insert new user in USER_USR table
-        conn.execute(
-            "INSERT INTO USER_USR (USR_USERNAME, USR_MAIL, USR_PASSWORD) VALUES (?, ?, ?)",
-            (username, email, password),
-        )
-        conn.commit()
-
-        # close the connection to the database
-        conn.close()
-
-        # redirect to the login page
-        flash("Vous êtes maintenant inscrit ! Veuillez vous connecter.")
-        return redirect("/login")
-
-    # return the template html page sign up
-    return render_template("signup.html")
-
-# Page + Function to add a new music 
-@app.route('/add_title', methods=['GET', 'POST'])
-
+@app.route("/add_title", methods=["GET", "POST"])
 def add_title_route():
-    if request.method == 'POST':
-
+    if request.method == "POST":
         # asks for all the information of the music to add
-        title_name = request.form['title_name']
-        title_artist = request.form['title_artist']
-        title_duration = request.form['title_duration']
-        title_type = request.form['title_type']
-        title_img = request.form['title_img']
+        title_name = request.form["title_name"]
+        title_artist = request.form["title_artist"]
+        title_duration = request.form["title_duration"]
+        title_type = request.form["title_type"]
+        title_img = request.form["title_img"]
         add_title(title_name, title_artist, title_duration, title_type, title_img)
         return redirect("/")
     else:
-        return render_template('add_title.html')
+        return render_template("add_title.html")
+
 
 def add_title(title_name, title_artist, title_duration, title_type, title_img):
-
     # connect to the database
-    conn = sqlite3.connect('database/spotifaux.db')
+    conn = sqlite3.connect("database/spotifaux.db")
 
     # add the new music in the database
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO TITLE_TTL (TTL_NAME, TTL_ARTIST, TTL_DURATION, TTL_TYPE, TTL_IMG) VALUES (?, ?, ?, ?, ?)", (title_name, title_artist, title_duration, title_type, title_img))
+    cursor.execute(
+        "INSERT INTO TITLE_TTL (TTL_NAME, TTL_ARTIST, TTL_DURATION, TTL_TYPE, TTL_IMG) VALUES (?, ?, ?, ?, ?)",
+        (title_name, title_artist, title_duration, title_type, title_img),
+    )
     conn.commit()
     conn.close()
+
+
+# Root - Delete a Song
+
+
+@app.route("/delete/<int:id>")
+def delete(id):
+    # connect to the database
+    conn = sqlite3.connect("database/spotifaux.db")
+
+    # delete a song from the database
+    cursor = conn.execute(
+        "DELETE FROM TITLE_TTL WHERE ID_TTL = ?;",
+        (id,),
+    )
+    conn.commit()
+
+    # close the connection to the database
+    conn.close()
+    return redirect("/")
 
 
 if __name__ == "__main__":
